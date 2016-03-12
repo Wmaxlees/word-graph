@@ -28,4 +28,4 @@
 ;
 ;    Test whether an object is a word-matrix
 (define (word-matrix? obj)
-  (vectorof (cons string? dict?)))
+  (vector? obj))

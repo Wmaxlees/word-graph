@@ -1,30 +1,41 @@
 #lang racket
 
-(require net/url
-         json)
+(require "word-count.rkt"
+         "index-map.rkt"
+         "word-matrix.rkt"
+         (planet dyoo/python-tokenizer))
 
-(let loop ()
-  (define str
-    (hash-ref
-     (car (hash-ref
-           (hash-ref (string->jsexpr
-                      (port->string
-                       (get-pure-port
-                        (string->url
-                         "https://en.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=1"))))
-                     'query)
-           'random))
-     'title))
+(define wc (load-count-from-file "wc.save"))
+(define wm (load-word-matrix-from-file "wm.save"))
+(define im (load-index-map-from-file "im.save"))
 
-  (set! str (string-split str ":"))
+(save-matrix-as-gexf wm im "test.gexf")
 
-  (cond [(and (not (equal? (car str) "User"))
-              (not (equal? (car str) "Template"))
-              (not (equal? (car str) "Talk"))
-              (not (equal? (car str) "Category"))
-              (not (equal? (car str) "User talk"))
-              (not (equal? (car str) "File")))
-         (cdr str)]
-        [else
-         (displayln str)
-         (loop)]))
+;(define wc (make-word-count))
+
+;(define file-list
+;  (directory-list (string->path "./sanitized") #:build? #t))
+
+;(count-file-list wc file-list)
+
+;(define wm (word-count->empty-word-matrix wc))
+;(define im (generate-index-map wm))
+
+;(for ([filename file-list])
+;  (define file (open-input-file filename))
+;  (printf "Counting word occurence in: ~s~n" (path->string filename))
+;  (define paragraph '())
+;  (for ([t (generate-tokens file)])
+    ; Generate sentence list
+;    (cond [(eq? (first t) 'NAME)
+;           (set! paragraph (append paragraph (list (second t))))]
+;          [(eq? (first t) 'NEWLINE)
+;           (for ([i paragraph])
+;             (for ([j paragraph])
+;               (cond [(not (equal? j i))
+;                      (increment-relation wm im (string-downcase i) (string-downcase j))])))
+;           (set! paragraph '())]))
+
+;  (close-input-port file))
+
+;(increment-relation wm im "the" "a")
