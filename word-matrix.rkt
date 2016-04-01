@@ -7,6 +7,8 @@
  (contract-out
   (increment-relation
    (word-matrix? index-map? string? string? . -> . any))
+  (word-matrix-set
+   (number? number? word-matrix? number? . -> . any))
   (load-word-matrix-from-file
    (string? . -> . word-matrix?))
   (save-word-matrix-to-file
@@ -38,6 +40,16 @@
 (define (matrix-increment i j word-matrix)
   (vector-set! word-matrix i (cons (car (vector-ref word-matrix i)) (dict-set (cdr (vector-ref word-matrix i)) j
                                                                               (+ 1 (dict-ref (cdr (vector-ref word-matrix i)) j 0))))))
+
+; word-matrix-set -> any
+;    i: number?
+;    j: number?
+;    word-matrix: word-matrix?
+;
+;    Sets the value at the index (i,j) in the matrix
+(define (word-matrix-set i j word-matrix value)
+  (vector-set! word-matrix i (cons (car (vector-ref word-matrix i)) (dict-set (cdr (vector-ref word-matrix i)) j value))))
+
 ; load-word-matrix-from-file -> word-matrix?
 ;    filename: string?
 ;
@@ -88,8 +100,9 @@
   (for ([i word-matrix])
     (define first (hash-ref index-map (car i)))
     (for ([j (dict->list (cdr i))])
-      (fprintf file "<edge id=\"~a\" source=\"~a\" target=\"~a\" />~n"
-               accum first (car j))
+      (when (> (cdr j) 0)
+        (fprintf file "<edge id=\"~a\" source=\"~a\" target=\"~a\" />~n"
+                 accum first (car j)))
       (set! accum (+ accum 1))))
 
   (fprintf file "</edges>~n</graph>~n</gexf>")

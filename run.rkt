@@ -3,13 +3,15 @@
 (require "word-count.rkt"
          "index-map.rkt"
          "word-matrix.rkt"
-         (planet dyoo/python-tokenizer))
+         "operations.rkt")
 
 (define wc (load-count-from-file "wc.save"))
 (define wm (load-word-matrix-from-file "wm.save"))
 (define im (load-index-map-from-file "im.save"))
 
-(save-matrix-as-gexf wm im "test.gexf")
+(cull-below-threshold wm im wc .7)
+
+;(save-matrix-as-gexf wm im "test.gexf")
 
 ;(define wc (make-word-count))
 
