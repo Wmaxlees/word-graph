@@ -22,11 +22,6 @@
                        (set! culled (+ 1 culled)))
                      (word-matrix-set index k word-matrix (if test
                                                               0
-                                                              1)))))
+                                                              (/ 1 (dict-count (cdr (vector-ref word-matrix index)))))))))
 
   (printf "Culled ~a edges.~n" culled))
-  
-    ;(for ([(j val) (cdr (vector-ref word-matrix index))]) (+ 0 val))))
-      ;(word-matrix-set index j word-matrix (if (> ε (/ val count))
-       ;                                        1
-        ;                                       0)))))

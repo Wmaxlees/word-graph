@@ -9,9 +9,9 @@
 (define wm (load-word-matrix-from-file "wm.save"))
 (define im (load-index-map-from-file "im.save"))
 
-(cull-below-threshold wm im wc .7)
+(cull-below-threshold wm im wc 0.7)
 
-;(save-matrix-as-gexf wm im "test.gexf")
+(save-matrix-as-gexf wm im "cull-weight-70.gexf")
 
 ;(define wc (make-word-count))
 
@@ -39,5 +39,3 @@
 ;           (set! paragraph '())]))
 
 ;  (close-input-port file))
-
-;(increment-relation wm im "the" "a")

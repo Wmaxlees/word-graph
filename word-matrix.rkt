@@ -101,8 +101,8 @@
     (define first (hash-ref index-map (car i)))
     (for ([j (dict->list (cdr i))])
       (when (> (cdr j) 0)
-        (fprintf file "<edge id=\"~a\" source=\"~a\" target=\"~a\" />~n"
-                 accum first (car j)))
+        (fprintf file "<edge id=\"~a\" source=\"~a\" target=\"~a\" weight=\"~a\" />~n"
+                 accum first (car j) (/ 1 (cdr j))))
       (set! accum (+ accum 1))))
 
   (fprintf file "</edges>~n</graph>~n</gexf>")
